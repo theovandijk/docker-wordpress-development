@@ -1,0 +1,37 @@
+version: "2"
+services:
+  mysql:
+      image: mysql:5.7
+      container_name: db
+      ports:
+        - 8081:3306
+      volumes:
+        - ./data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: wordpress
+        MYSQL_DATABASE: wordpress
+        MYSQL_USER: wordpress
+        MYSQL_PASSWORD: wordpress
+  wordpress:
+      image: wordpress
+      container_name: wordpress
+      volumes:
+        - ..:/var/www/html
+      ports:
+        - 8080:80
+      links:
+        - mysql
+      environment:
+        WORDPRESS_DB_PASSWORD: wordpress
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin
+      restart: always
+      links:
+        - mysql
+      ports:
+        - 8183:80
+      environment:
+        MYSQL_USERNAME: wordpress
+        MYSQL_ROOT_PASSWORD: wordpress
+        PMA_ARBITRARY: 1
